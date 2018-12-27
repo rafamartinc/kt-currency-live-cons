@@ -1,38 +1,13 @@
 # -*- coding: utf-8 -*-
 import argparse
-import kafka
+from kafka import KafkaConsumer
 from influxdb import InfluxDBClient
 
 def main(host, port, dbname):
-    # Consumidor de datos simples
 
-    consumer = KafkaConsumer(kt_currencies, auto_offset_reset='earliest',
-                             bootstrap_servers=['localhost:9092'], api_version=(0, 10), consumer_timeout_ms=1000)
-    for msg in consumer:
-        json_body_SinglePoints = [
-                {"measurement": "SinglePoints",
-                'time': consumer['timestamp'],
-                "tags":{
-                    'currency': consumer['currency'],
-                    'reference_currency': consumer['reference_currency'],
-                    'API': consumer['api']
-                },
-                "fields":{
-                    'value': consumer['value'],
-                    }
-                }
-        ]
-        client = InfluxDBClient(host, port)
-        print("Create database: " + dbname)
-        client.create_database(dbname)
-        print("Create a retention policy")
-        client.create_retention_policy('awesome_policy', '30d', replication='1', database=dbname, default=True)
-        client.write_points(json_body_SinglePoints, database=dbname, protocol='json')
-
-    #Consumidor de datos agregados
-    consumer_hour = KafkaConsumer(kt_currencies, auto_offset_reset='earliest',
+    consumer_hour = KafkaConsumer(kt_hourly_currencies, auto_offset_reset='earliest',
                                  bootstrap_servers=['localhost:9092'], api_version=(0, 10), consumer_timeout_ms=1000)
-    for msg in consumer_hour
+    for msg in consumer_hour:
         json_body_AggregatedPoints = [
             {"measurement": "AggregatedPoints",
              'time': consumer_hour['timestamp'],
