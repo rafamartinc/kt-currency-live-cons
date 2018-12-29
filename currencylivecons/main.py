@@ -21,14 +21,10 @@ def main():
 
     parser = argparse.ArgumentParser(description='KafkaConsumer that streams live data to InfluxDB')
 
-    parser.add_argument('-k', '--kafka_host',
-                        default='localhost',
+    parser.add_argument('-k', '--kafka_servers',
+                        default='localhost:9092',
                         type=str,
-                        help='Kafka host (default: localhost)')
-    parser.add_argument('-p', '--kafka_port',
-                        default=9092,
-                        type=int,
-                        help='Kafka port (default: 9092)')
+                        help='Kafka servers, separated by colons (default: localhost:9092)')
     parser.add_argument('-t', '--kafka_topic',
                         default='kt_currencies',
                         type=str,
@@ -48,8 +44,8 @@ def main():
 
     args = parser.parse_args()
 
-    KingstonLiveConsumer(args.kafka_host, args.kafka_port, args.kafka_topic,
-                         args.influx_host, args.influx_port, args.influx_db)
+    KingstonLiveConsumer(kafka_servers=args.kafka_servers, kafka_topic=args.kafka_topic,
+                         influx_host=args.influx_host, influx_port=args.influx_port, influx_db=args.influx_db)
 
 
 if __name__ == '__main__':

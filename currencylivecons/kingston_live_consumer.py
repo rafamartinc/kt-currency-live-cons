@@ -22,11 +22,10 @@ from .apis.influx import InfluxConnection
 
 class KingstonLiveConsumer:
 
-    def __init__(self, kafka_host='localhost', kafka_port=9092, kafka_topic='kt_currencies',
+    def __init__(self, kafka_servers='localhost:9092', kafka_topic='kt_currencies',
                  influx_host='localhost', influx_port=9092, influx_db='currencies'):
 
-        self._kafka_host = kafka_host
-        self._kafka_port = kafka_port
+        self._kafka_servers = kafka_servers
         self._kafka_topic = kafka_topic
 
         self._influx = InfluxConnection(influx_host, influx_port, influx_db)
@@ -41,7 +40,7 @@ class KingstonLiveConsumer:
         try:
             print('[INFO] Trying to connect to Kafka...')
             self._kafka = KafkaConsumer(self._kafka_topic, auto_offset_reset='earliest',
-                                        bootstrap_servers=[str(self._kafka_host) + ':' + str(self._kafka_port)],
+                                        bootstrap_servers=self._kafka_servers.split(','),
                                         api_version=(0, 9), group_id='live_consumers')
         except Exception as ex:
             print('Exception while connecting Kafka, retrying in 1 second')
