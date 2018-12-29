@@ -55,9 +55,12 @@ class KingstonLiveConsumer:
 
         if self._kafka is not None:
 
+            print('[INFO] Initializing...')
+            
             for msg in self._kafka:
 
                 msg = json.loads(msg.value.decode('utf-8'))
+                print(msg)
 
                 document = [
                     {
