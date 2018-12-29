@@ -43,7 +43,6 @@ def main():
                         help='Name of database within InfluxDB (default: currencies)')
 
     args = parser.parse_args()
-    print(str(args.kafka_servers.split(',')))
 
     KingstonLiveConsumer(kafka_servers=args.kafka_servers, kafka_topic=args.kafka_topic,
                          influx_host=args.influx_host, influx_port=args.influx_port, influx_db=args.influx_db)

@@ -25,7 +25,7 @@ class KingstonLiveConsumer:
     def __init__(self, kafka_servers='localhost:9092', kafka_topic='kt_currencies',
                  influx_host='localhost', influx_port=9092, influx_db='currencies'):
 
-        self._kafka_servers = kafka_servers
+        self._kafka_servers = kafka_servers.split(',')
         self._kafka_topic = kafka_topic
 
         self._influx = InfluxConnection(influx_host, influx_port, influx_db)
@@ -41,8 +41,7 @@ class KingstonLiveConsumer:
             print('[INFO] Trying to connect to Kafka...')
             self._kafka = KafkaConsumer(self._kafka_topic,
                                         group_id='live_consumers',
-                                        bootstrap_servers=self._kafka_servers.split(','),
-                                        auto_offset_reset='earliest')
+                                        bootstrap_servers=self._kafka_servers)
         except Exception as ex:
             print('Exception while connecting Kafka, retrying in 1 second')
             print(str(ex))
@@ -50,14 +49,13 @@ class KingstonLiveConsumer:
             self._kafka = None
             time.sleep(1)
         else:
-            print('[INFO] Connected to Kafka.')
+            print('[INFO] Connected to Kafka: ' + str(self._kafka_servers))
 
     def _stream_data(self):
 
         if self._kafka is not None:
 
-            print('[INFO] Initializing...')
-            print(self._kafka)
+            print('[INFO] Initializing... Consuming from ' + str(self._kafka_topic))
 
             for msg in self._kafka:
 
