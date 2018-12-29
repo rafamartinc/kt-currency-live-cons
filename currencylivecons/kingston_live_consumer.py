@@ -41,12 +41,12 @@ class KingstonLiveConsumer:
             print('[INFO] Trying to connect to Kafka...')
             self._kafka = KafkaConsumer(self._kafka_topic, auto_offset_reset='earliest',
                                         bootstrap_servers=self._kafka_servers.split(','),
-                                        api_version=(0, 9), group_id='live_consumers')
+                                        api_version=(0, 9))#, group_id='live_consumers')
         except Exception as ex:
             print('Exception while connecting Kafka, retrying in 1 second')
             print(str(ex))
 
-            self._producer = None
+            self._kafka = None
             time.sleep(1)
         else:
             print('[INFO] Connected to Kafka.')
@@ -56,7 +56,7 @@ class KingstonLiveConsumer:
         if self._kafka is not None:
 
             print('[INFO] Initializing...')
-            
+
             for msg in self._kafka:
 
                 msg = json.loads(msg.value.decode('utf-8'))
