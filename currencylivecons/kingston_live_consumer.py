@@ -39,6 +39,7 @@ class KingstonLiveConsumer:
         # Kafka.
         try:
             print('[INFO] Trying to connect to Kafka...')
+            print(str(self._kafka_servers.split(',')))
             self._kafka = KafkaConsumer(self._kafka_topic,
                                         group_id='live_consumers',
                                         bootstrap_servers=self._kafka_servers.split(','),
