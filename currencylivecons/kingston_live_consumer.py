@@ -41,7 +41,8 @@ class KingstonLiveConsumer:
             print('[INFO] Trying to connect to Kafka...')
             self._kafka = KafkaConsumer(self._kafka_topic,
                                         group_id='live_consumers',
-                                        bootstrap_servers=self._kafka_servers)
+                                        bootstrap_servers=self._kafka_servers,
+                                        auto_offset_reset='earliest')
         except Exception as ex:
             print('Exception while connecting Kafka, retrying in 1 second')
             print(str(ex))
@@ -60,7 +61,6 @@ class KingstonLiveConsumer:
             for msg in self._kafka:
 
                 msg = json.loads(msg.value.decode('utf-8'))
-                print(msg)
 
                 document = [
                     {
