@@ -75,6 +75,5 @@ class KingstonLiveConsumer:
                     }
                 ]
 
-                print(document)
-
-                self._influx.send(document)
+                if self._influx.send(document):
+                    print(document)

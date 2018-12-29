@@ -58,3 +58,5 @@ class InfluxConnection:
                 print('Exception while sending to InfluxDB')
                 print(str(ex))
                 self._influx = None
+
+        return sent
